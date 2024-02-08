@@ -68,12 +68,9 @@ def init_driver():
     return driver
 
 async def send_mail(content):
-    print('send_mail')
     bot = telegram.Bot("Token")
     async with bot:
-        print(await bot.get_me())
         chat_id = (await bot.get_updates())
-        print(chat_id)
         await bot.send_message(text=content, chat_id=6449392325)
 
 def main():
@@ -95,8 +92,6 @@ def main():
                 time.sleep(5)
                 
                 WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, 'card-list-container')))
-                print("OK")
-                
                 page_source = driver.page_source
                 soup = BeautifulSoup(page_source, 'html.parser')
                 div_elements = soup.find_all(attrs={"data-ev-label": "search_results_impression"})
@@ -105,7 +100,10 @@ def main():
                     project_title = div.find('a', class_='up-n-link').text.strip()
                     project_url = "https://www.upwork.com" + div.find('a', class_='up-n-link').get('href')
                     project_posted = div.find(attrs={"data-test": "JobTileHeader"}).find('small').find_all('span')[1].text.replace('\n', '').strip()
-                    project_spent = div.find(attrs={"data-test": "total-spent"}).text.replace('\n', '').strip()
+                    if div.find(attrs={"data-test": "total-spent"}):
+                        project_spent = div.find(attrs={"data-test": "total-spent"}).text.replace('\n', '').strip()
+                    else:
+                        project_spent = 'No spent'
                     project_location = div.find(attrs={"data-test": "location"}).text.replace('\n', '').strip()
                     if 'Hourly' in div.find(attrs={"data-test": "JobInfoFeatures"}).text:
                         project_price = div.find(attrs={"data-test": "job-type-label"}).text.strip()
@@ -113,15 +111,20 @@ def main():
                         project_price = div.find(attrs={"data-test": "is-fixed-price"}).find_all('strong')[1].text.replace('\n', '').strip()
                     project_details = div.find(attrs={"data-test": "JobInfoFeatures"}).text
                     project_description = div.find(attrs={"data-test": "UpCLineClamp JobDescription"}).text.strip()
-                    project_skills = ', '.join(span.text for span in div.find(attrs={"data-test": "TokenClamp JobAttrs"}).find_all(attrs={"data-test": "token"}))
+                    if div.find(attrs={"data-test": "TokenClamp JobAttrs"}):
+                        project_skills = ', '.join(span.text for span in div.find(attrs={"data-test": "TokenClamp JobAttrs"}).find_all(attrs={"data-test": "token"}))
+                    else:
+                        project_skills = "No skills"
                     project = [project_title, project_spent + " " + project_location, project_price, project_description, project_skills]                    
                     if project not in total_proects: 
                         message = project_posted + '\n' + project_title + '\n(' + project_url + ')' + "\n\n" + 'Total Spent: ' + project_spent + '\n' + 'Location: ' + project_location + "\n" + 'Price: ' + project_price + "\n\n" + 'Description: ' + '\n' + project_description + "\n\n" + 'Skills' + '\n' + project_skills
                         asyncio.run(send_mail(message))
                         print(project)
+                        print('\n')
                     total_proects.append(project) 
                 time.sleep(10)
-            except TimeoutException as e:            
+            except TimeoutException as e:    
+                print(f"Error: {e}")        
                 driver.quit()
                 time.sleep(5)
                 driver = init_driver()
@@ -152,7 +155,8 @@ def main():
                 except Exception as e:
                     print(f"Login error: {e}")
                     driver.quit()
-            except Exception as e:            
+            except Exception as e:   
+                print(f"Error: {e}")         
                 driver.quit()
                 time.sleep(5)
                 driver = init_driver()
