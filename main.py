@@ -81,10 +81,31 @@ def main():
         username = 'andreasfischer0201+200@gmail.com'
         password = 'jrw20200417'
 
-        if not login_to_website(driver, username, password, login_url):
-            print("Login failure.")
+        try:
+            driver.get(login_url)
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'login_username')))
+            username_field = driver.find_element(By.ID, 'login_username')
+            submit_button = driver.find_element(By.ID, 'login_password_continue')
+
+            username_field.send_keys(username)
+            submit_button.click()
+            time.sleep(5)
+            
+            password_field = driver.find_element(By.ID, 'login_password')
+            submit_button_login = driver.find_element(By.ID, 'login_control_continue')
+            password_field.send_keys(password)
+            submit_button_login.click()
+            
+            WebDriverWait(driver, 10).until(EC.url_changes(login_url))                    
+            time.sleep(10)
+        except TimeoutException as e:
+            print(f"Login timeout: {e}. Retrying...")
+            driver.quit() 
+            continue       
+        except Exception as e:
+            print(f"Login error: {e}")
             driver.quit()
-            return
+            continue
         for _ in range(30):
 
             try:
@@ -111,6 +132,8 @@ def main():
                         project_price = div.find(attrs={"data-test": "is-fixed-price"}).find_all('strong')[1].text.replace('\n', '').strip()
                     project_details = div.find(attrs={"data-test": "JobInfoFeatures"}).text
                     project_description = div.find(attrs={"data-test": "UpCLineClamp JobDescription"}).text.strip()
+                    if len(project_description) > 3000:
+                        project_description = project_description[:3000]
                     if div.find(attrs={"data-test": "TokenClamp JobAttrs"}):
                         project_skills = ', '.join(span.text for span in div.find(attrs={"data-test": "TokenClamp JobAttrs"}).find_all(attrs={"data-test": "token"}))
                     else:
