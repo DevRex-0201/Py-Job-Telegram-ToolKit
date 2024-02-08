@@ -144,9 +144,7 @@ def main():
                     password_field.send_keys(password)
                     submit_button_login.click()
                     
-                    WebDriverWait(driver, 10).until(EC.url_changes(login_url))
-                    if "login" not in driver.current_url.lower():
-                        return True
+                    WebDriverWait(driver, 10).until(EC.url_changes(login_url))                    
                     time.sleep(10)
                 except TimeoutException as e:
                     print(f"Login timeout: {e}. Retrying...")
@@ -177,9 +175,7 @@ def main():
                     password_field.send_keys(password)
                     submit_button_login.click()
                     
-                    WebDriverWait(driver, 10).until(EC.url_changes(login_url))
-                    if "login" not in driver.current_url.lower():
-                        return True
+                    WebDriverWait(driver, 10).until(EC.url_changes(login_url))                    
                     time.sleep(10)
                 except TimeoutException as e:
                     print(f"Login timeout: {e}. Retrying...")
