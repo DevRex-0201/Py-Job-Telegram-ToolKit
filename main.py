@@ -28,7 +28,6 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 UPWORK_USERNAME = os.getenv("UPWORK_USERNAME")
 UPWORK_PASSWORD = os.getenv("UPWORK_PASSWORD")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
-print(TELEGRAM_TOKEN)
 def login_to_website(driver, username, password, login_url):
     try:
         driver.get(login_url)
@@ -189,8 +188,6 @@ def main():
                     print(f"Login error: {e}")
                     driver.quit()
             except Exception as e:  
-                print(project_title )
-                break
                 print(f"Error: {e}")         
                 driver.quit()
                 time.sleep(5)

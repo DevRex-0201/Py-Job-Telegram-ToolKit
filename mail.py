@@ -8,7 +8,6 @@ dotenv.load_dotenv()
 
 # Use os.getenv to retrieve environment variables
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
-print(TELEGRAM_TOKEN)
 async def send_mail():
     print('send_mail')
     bot = telegram.Bot(TELEGRAM_TOKEN)
