@@ -68,7 +68,7 @@ def init_driver():
     return driver
 
 async def send_mail(content):
-    bot = telegram.Bot("6195527429:AAF4l0_OAktQ43p6DhWjLmRXnMv-8zRSrac")
+    bot = telegram.Bot("")
     async with bot:
         chat_id = (await bot.get_updates())
         await bot.send_message(text=content, chat_id=6449392325)
@@ -106,7 +106,7 @@ def main():
             print(f"Login error: {e}")
             driver.quit()
             continue
-        for _ in range(30):
+        for index in range(60):
             file_path = 'urls.txt'
             if os.path.exists('urls.txt'):
                 with open(file_path, 'r', encoding='utf-8') as file:                                        
@@ -218,6 +218,7 @@ def main():
                             except Exception as e:
                                 print(f"Login error: {e}")
                                 driver.quit()
+            print(index)
         driver.quit()
 
 if __name__ == "__main__":

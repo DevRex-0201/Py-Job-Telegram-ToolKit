@@ -35,7 +35,7 @@ def get_initial_cookies(url, headers):
         return response.cookies
 
 async def send_mail(content):
-    bot = telegram.Bot("6195527429:AAF4l0_OAktQ43p6DhWjLmRXnMv-8zRSrac")
+    bot = telegram.Bot("")
     async with bot:
         chat_id = (await bot.get_updates())
         await bot.send_message(text=content, chat_id=6449392325)

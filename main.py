@@ -68,7 +68,7 @@ def init_driver():
     return driver
 
 async def send_mail(content):
-    bot = telegram.Bot("Token")
+    bot = telegram.Bot("6195527429:AAF4l0_OAktQ43p6DhWjLmRXnMv-8zRSrac")
     async with bot:
         chat_id = (await bot.get_updates())
         await bot.send_message(text=content, chat_id=6449392325)
@@ -106,7 +106,7 @@ def main():
             print(f"Login error: {e}")
             driver.quit()
             continue
-        for _ in range(60):
+        for index in range(60):
 
             try:
                 driver.get("https://www.upwork.com/nx/search/jobs?payment_verified=1&q=%28scrap,%20OR%20extraction,%20OR%20data%20OR%20mining,%20OR%20python,%29&sort=recency")
@@ -145,7 +145,8 @@ def main():
                         print(project)
                         print('\n')
                     total_proects.append(project) 
-                time.sleep(10)
+                print(index)
+                time.sleep(5)
             except TimeoutException as e:    
                 print(f"Error: {e}")        
                 driver.quit()
