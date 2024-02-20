@@ -20,6 +20,15 @@ import asyncio
 import telegram
 from telegram import Bot  # Make sure to import Bot correctly
 
+# Load environment variables
+dotenv.load_dotenv()
+
+# Use os.getenv to retrieve environment variables
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+UPWORK_USERNAME = os.getenv("UPWORK_USERNAME")
+UPWORK_PASSWORD = os.getenv("UPWORK_PASSWORD")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+print(TELEGRAM_TOKEN)
 def login_to_website(driver, username, password, login_url):
     try:
         driver.get(login_url)
@@ -68,18 +77,18 @@ def init_driver():
     return driver
 
 async def send_mail(content):
-    bot = telegram.Bot("6195527429:AAF4l0_OAktQ43p6DhWjLmRXnMv-8zRSrac")
+    bot = telegram.Bot(TELEGRAM_TOKEN)
     async with bot:
         chat_id = (await bot.get_updates())
-        await bot.send_message(text=content, chat_id=6449392325)
+        await bot.send_message(text=content, chat_id=TELEGRAM_CHAT_ID)
 
 def main():
     total_proects = []
     while True:       
         driver = init_driver()
         login_url = 'https://www.upwork.com/ab/account-security/login'
-        username = 'andreasfischer0201+200@gmail.com'
-        password = 'jrw20200417'
+        username = UPWORK_USERNAME
+        password = UPWORK_PASSWORD
 
         try:
             driver.get(login_url)
@@ -107,11 +116,10 @@ def main():
             driver.quit()
             continue
         for index in range(60):
-
+            project_title = ''
             try:
-                driver.get("https://www.upwork.com/nx/search/jobs?payment_verified=1&q=%28scrap,%20OR%20extraction,%20OR%20data%20OR%20mining,%20OR%20python,%29&sort=recency")
+                driver.get("https://www.upwork.com/nx/search/jobs?amount=150-&contractor_tier=1,2,3&hourly_rate=10-&payment_verified=1&q=%28scrap,%20OR%20extraction,%20OR%20python,%20OR%20automation%29&sort=recency&t=0,1")
                 time.sleep(5)
-                
                 WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, 'card-list-container')))
                 page_source = driver.page_source
                 soup = BeautifulSoup(page_source, 'html.parser')
@@ -140,7 +148,8 @@ def main():
                         project_skills = "No skills"
                     project = [project_title, project_spent + " " + project_location, project_price, project_description, project_skills]                    
                     if project not in total_proects: 
-                        message = project_posted + '\n' + project_title + '\n(' + project_url + ')' + "\n\n" + 'Total Spent: ' + project_spent + '\n' + 'Location: ' + project_location + "\n" + 'Price: ' + project_price + "\n\n" + 'Description: ' + '\n' + project_description + "\n\n" + 'Skills' + '\n' + project_skills
+                        mark = '==================================================='
+                        message = mark + '\n' + project_posted + '\n' + project_title + '\n(' + project_url + ')' + "\n\n" + 'Total Spent: ' + project_spent + '\n' + 'Location: ' + project_location + "\n" + 'Price: ' + project_price + "\n\n" + 'Description: ' + '\n' + project_description + "\n\n" + 'Skills' + '\n' + project_skills + '\n' + mark
                         asyncio.run(send_mail(message))
                         print(project)
                         print('\n')
@@ -179,7 +188,9 @@ def main():
                 except Exception as e:
                     print(f"Login error: {e}")
                     driver.quit()
-            except Exception as e:   
+            except Exception as e:  
+                print(project_title )
+                break
                 print(f"Error: {e}")         
                 driver.quit()
                 time.sleep(5)
