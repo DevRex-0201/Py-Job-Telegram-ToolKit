@@ -106,10 +106,10 @@ def main():
             print(f"Login error: {e}")
             driver.quit()
             continue
-        for _ in range(30):
+        for _ in range(60):
 
             try:
-                driver.get("https://www.upwork.com/nx/search/jobs?amount=200-&hourly_rate=10-&payment_verified=1&q=scrap&sort=recency&t=0,1")
+                driver.get("https://www.upwork.com/nx/search/jobs?payment_verified=1&q=%28scrap,%20OR%20extraction,%20OR%20data%20OR%20mining,%20OR%20python,%29&sort=recency")
                 time.sleep(5)
                 
                 WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, 'card-list-container')))
