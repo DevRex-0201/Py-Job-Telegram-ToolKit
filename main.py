@@ -148,7 +148,7 @@ def main():
                     project = [project_title, project_spent + " " + project_location, project_price, project_description, project_skills]                    
                     if project not in total_proects: 
                         mark = '==================================================='
-                        message = mark + '\n' + project_posted + '\n' + project_title + '\n(' + project_url + ')' + "\n\n" + 'Total Spent: ' + project_spent + '\n' + 'Location: ' + project_location + "\n" + 'Price: ' + project_price + "\n\n" + 'Description: ' + '\n' + project_description + "\n\n" + 'Skills' + '\n' + project_skills + '\n' + mark
+                        message = project_posted + '\n' + project_title + '\n(' + project_url + ')' + "\n\n" + 'Total Spent: ' + project_spent + '\n' + 'Location: ' + project_location + "\n" + 'Price: ' + project_price + "\n\n" + 'Description: ' + '\n' + project_description + "\n\n" + 'Skills' + '\n' + project_skills + '\n'
                         asyncio.run(send_mail(message))
                         print(project)
                         print('\n')
