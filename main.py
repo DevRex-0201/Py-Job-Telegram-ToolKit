@@ -11,7 +11,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from bs4 import BeautifulSoup
 import time
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
@@ -128,6 +128,11 @@ def main():
                     project_title = div.find('a', class_='up-n-link').text.strip()
                     project_url = "https://www.upwork.com" + div.find('a', class_='up-n-link').get('href')
                     project_posted = div.find(attrs={"data-test": "JobTileHeader"}).find('small').find_all('span')[1].text.replace('\n', '').strip()
+                    jst_timezone = timezone(timedelta(hours=9))
+                    # Get the current date and time in JST
+                    current_date_time_jst = datetime.now(jst_timezone)
+                    # Format the date and time
+                    posted_time = current_date_time_jst.strftime("%m-%d %H:%M")
                     if div.find(attrs={"data-test": "total-spent"}):
                         project_spent = div.find(attrs={"data-test": "total-spent"}).text.replace('\n', '').strip()
                     else:
@@ -148,7 +153,7 @@ def main():
                     project = [project_title, project_spent + " " + project_location, project_price, project_description, project_skills]                    
                     if project not in total_proects: 
                         mark = '==================================================='
-                        message = project_posted + '\n' + project_title + '\n(' + project_url + ')' + "\n\n" + 'Total Spent: ' + project_spent + '\n' + 'Location: ' + project_location + "\n" + 'Price: ' + project_price + "\n\n" + 'Description: ' + '\n' + project_description + "\n\n" + 'Skills' + '\n' + project_skills + '\n'
+                        message = project_posted + ' from ' + posted_time + '\n' + project_title + '\n' + project_url + "\n\n" + 'Total Spent: ' + project_spent + '\n' + 'Location: ' + project_location + "\n" + 'Price: ' + project_price + "\n\n" + 'Description: ' + '\n' + project_description + "\n\n" + 'Skills' + '\n' + project_skills + '\n'
                         asyncio.run(send_mail(message))
                         print(project)
                         print('\n')
@@ -161,8 +166,8 @@ def main():
                 time.sleep(5)
                 driver = init_driver()
                 login_url = 'https://www.upwork.com/ab/account-security/login'
-                username = 'andreasfischer0201+200@gmail.com'
-                password = 'jrw20200417'
+                username = UPWORK_USERNAME
+                password = UPWORK_PASSWORD
 
                 try:
                     driver.get(login_url)
@@ -193,8 +198,8 @@ def main():
                 time.sleep(5)
                 driver = init_driver()
                 login_url = 'https://www.upwork.com/ab/account-security/login'
-                username = 'andreasfischer0201+200@gmail.com'
-                password = 'jrw20200417'
+                username = UPWORK_USERNAME
+                password = UPWORK_PASSWORD
 
                 try:
                     driver.get(login_url)
