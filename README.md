@@ -1,4 +1,4 @@
-# Job Scraper and Notifier
+# Telegram Job Scraper and Notifier
 
 ## Overview
 
