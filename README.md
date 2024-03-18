@@ -6,7 +6,7 @@ The Job Scraper and Notifier is a sophisticated Python application designed to a
 
 ## Video Preview
 
-[![Video Preview](https://github.com/DevRex-0201/Project-Images/blob/main/video%20preview/Py-Upwork-Telegram-ToolKit.png)](https://drive.google.com/file/d/1gtV-hPmrYgNEdfcd7CGHODfvURd9AyrI/view?usp=drive_link)
+[![Video Preview](https://github.com/DevRex-0201/Project-Images/blob/main/video%20preview/Py-Upwork-Telegram-ToolKit.png)](https://brand-car.s3.eu-north-1.amazonaws.com/Four+Seasons/Py-Job-Telegram-ToolKit.mp4)
 
 ## Features
 
